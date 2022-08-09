@@ -1,0 +1,27 @@
+G++ := g++ -O3 -std=c++17 -c
+
+.PHONY: default clean dir trash
+
+default: build/server_m.o build/protocol_fs_server.o build/assist.o
+	g++ build/server_m.o build/protocol_fs_server.o build/assist.o -O3 -std=c++17 -o server_m -lssl -lcrypto
+
+build/server_m.o: server_m.cpp lib.hpp lib_server.hpp
+	$(G++) server_m.cpp -o build/server_m.o
+
+build/assist.o: assist.cpp lib.hpp
+	$(G++) assist.cpp -o build/assist.o
+
+build/protocol_fs_server.o: protocol_fs_server.cpp
+	$(G++) protocol_fs_server.cpp -o build/protocol_fs_server.o
+
+clean:
+	@rm -rf *.o
+	@rm -rf server_m
+	trash:
+
+dir:
+	@mkdir build keys
+
+trash:
+	@rm res/*.enc
+	@rm res/*.dec
